@@ -4,7 +4,9 @@ var TelegramBot = require('node-telegram-bot-api'),
     request = require('request'),
     entities = require('html-entities').AllHtmlEntities,
     token = '542331590:AAFbJn0NN5DdHXDzutxzc2Ma8vuFc8vALpg',
-    chatId = 1;
+    fs = require('fs'),
+    chatId = 1,
+    f = 0;
 
 var bot = new TelegramBot(token, {
     polling: true
@@ -43,7 +45,47 @@ bot.on('message', function (msg) {
             bot.sendMessage(chatId, 'Спокойной ночи ' + msg.from.first_name + '! Хороших снов');
         };
     };
+    if (msg.text.toLowerCase().indexOf('музыка') != -1 || msg.text.toLowerCase().indexOf('музыку') != -1 || msg.text.toLowerCase().indexOf('музыки') != -1) {
+        bot.sendMessage(chatId, "Обожаю");
+        var audio = __dirname + '/music.mp3';
+        bot.sendAudio(chatId, audio);
+    }
+    if (msg.text == 'Исследовать окрестности') {
+        bot.sendMessage(chatId, "Вы видите шатёр!");
+    } else if (msg.text == 'Исследовать замок') {
+        bot.sendMessage(chatId, "Вас убили :(");
+    };
+    if (msg.text.toLowerCase().indexOf('да') != -1 & f == 1) {
+        bot.sendMessage(chatId, "Отлично!");
+        f = 0;
+        game(chatId);
+    } else if (msg.text.toLowerCase().indexOf('да') == -1 & f == 1) {
+        bot.sendMessage(chatId, "Ну ладно, может в другой раз");
+        f = 0;
+    };
+    if (msg.text.toLowerCase().indexOf('игра') != -1) {
+        bot.sendMessage(chatId, "Хотите поиграть в игру?");
+        f = 1;
+    };
 });
+
+function game(chatId) {
+    bot.sendMessage(chatId, "Начнём игру!");
+    bot.sendMessage(chatId, "Ваш герой оказался около замка. Что ему делать: исследовать замок или исследовать окрестности?", {
+        reply_markup: JSON.stringify({
+            keyboard: [
+                [{
+                    text: "Исследовать окрестности",
+                    callback_data: "147"
+                }],
+                [{
+                    text: "Исследовать замок",
+                    callback_data: "151"
+                }]
+            ]
+        })
+    });
+};
 
 var job = new cron('00 00 07 * * 0-6', function () {
     bot.sendMessage(chatId, "Это твой день, и сегодня тебя ничего не остановит!");
