@@ -1,4 +1,3 @@
-process.env["NTBA_FIX_319"] = 1;
 var TelegramBot = require('node-telegram-bot-api'),
     cron = require('cron').CronJob,
     request = require('request'),
@@ -11,7 +10,6 @@ var bot = new TelegramBot(token, {
 });
 bot.on('message', function (msg) {
     chatId = msg.chat.id;
-    console.log(msg);
     if (msg.text.toLowerCase().indexOf('привет') != -1 || msg.text.toLowerCase().indexOf('здравствуй') != -1 || msg.text.toLowerCase() == 'хай' || msg.text.toLowerCase() == 'hi' || msg.text.toLowerCase() == 'hello' || msg.text.toLowerCase().indexOf('салют') != -1) {
         if (msg.from.last_name == undefined) {
             bot.sendMessage(chatId, 'Привет, ' + msg.from.username + '!');
