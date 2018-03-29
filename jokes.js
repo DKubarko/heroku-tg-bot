@@ -1,3 +1,4 @@
+process.env["NTBA_FIX_319"] = 1;
 var TelegramBot = require('node-telegram-bot-api'),
     cron = require('cron').CronJob,
     request = require('request'),
